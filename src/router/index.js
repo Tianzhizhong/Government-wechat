@@ -6,6 +6,8 @@ import statistics from './statistics'
 import punchrecord from './punchrecord'
 import VueRouter from 'vue-router'
 import Month from  './month'
+import Holiday from './holiday'
+import Leave from './leave'
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -20,6 +22,8 @@ export default new VueRouter({
     statistics,
     punchrecord,
     Month,
+    Holiday,
+    Leave,
     {
       path:"**",
       redirect:"/clock"

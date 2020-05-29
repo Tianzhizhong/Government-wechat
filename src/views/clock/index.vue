@@ -12,7 +12,7 @@
               <a @click="handleCommand">打卡记录</a>
             </el-dropdown-item>
             <el-dropdown-item icon="el-icon-edit">
-              <a>假勤申请</a>
+              <a @click="hanldeHoliday">假勤申请</a>
             </el-dropdown-item>
             <el-dropdown-item icon="el-icon-s-tools">打卡设置</el-dropdown-item>
             <el-dropdown-item icon="el-icon-question">帮助中心</el-dropdown-item>
@@ -69,6 +69,9 @@ export default {
     },
     handleCommand() {
        this.$router.push('/punchrecord')
+    },
+    hanldeHoliday(){
+      this.$router.push('./holiday')
     }
   }
 };
