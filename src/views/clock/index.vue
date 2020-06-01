@@ -3,6 +3,7 @@
       <div class="clock-top">
         <i class="el-icon-back"></i>
         <span>打卡</span>
+        <button @click="demo">跳转</button>
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
             <i class="el-icon-more"></i>
@@ -64,6 +65,11 @@ export default {
     };
   },
   methods: {
+    demo(){
+      this.$router.push({
+        name:'clock'
+      })
+    },
     handleClick(tab, event) {
       console.log(tab, event);
     },
