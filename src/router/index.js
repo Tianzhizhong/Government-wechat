@@ -8,6 +8,8 @@ import VueRouter from 'vue-router'
 import Month from  './month'
 import Holiday from './holiday'
 import Leave from './leave'
+import Travel from './travel'
+import Set from './set'
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -24,6 +26,8 @@ export default new VueRouter({
     Month,
     Holiday,
     Leave,
+    Travel,
+    Set,
     {
       path:"**",
       redirect:"/clock"

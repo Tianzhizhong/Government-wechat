@@ -8,7 +8,7 @@
           <i class="el-icon-date"></i>
           <p>请假</p>
         </div>
-        <div class="chai">
+        <div class="chai" @click="handChai">
           <i class="el-icon-position"></i>
           <p>出差</p>
         </div>
@@ -22,6 +22,9 @@ export default {
     methods:{
         handleHol(){
           this.$router.push('/leave')
+        },
+        handChai(){
+          this.$router.push('/travel')
         }
     }
 };
@@ -72,7 +75,7 @@ export default {
   }
 }
 </style>
-<style>
+<style scoped>
 .mint-header {
   height: 0.8rem;
   font-size: 30px;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <mt-header title="请假">
+    <mt-header title="出差">
       <router-link to="/" slot="left">
         <mt-button icon="back"></mt-button>
         <i class="el-icon-time"></i>
@@ -20,11 +20,23 @@
       </el-select>
     </div>
     <div class="lei">
-      <div class="bu">请假类型</div>
+      <div class="bu">姓名</div>
       <div class="dian"></div>
-      <el-select v-model="value1" placeholder="请选择" size="medium">
-        <el-option v-for="item in data" :key="item.value" :label="item.label" :value="item.value"></el-option>
-      </el-select>
+      <el-input placeholder="请选择" v-model="input3">
+        <i slot="suffix" class="el-input__icon el-icon-arrow-right"></i>
+      </el-input>
+    </div>
+    <div class="lei">
+      <div class="bu">出差地点</div>
+      <div class="dian"></div>
+      <el-input placeholder="请选择" v-model="input4">
+        <i slot="suffix" class="el-input__icon el-icon-arrow-right"></i>
+      </el-input>
+    </div>
+    <!-- 出差事由 -->
+    <div class="shi">
+      <div class="title">出差事由</div>
+      <textarea></textarea>
     </div>
     <!-- 开始时间 结束时间 -->
     <div class="start">
@@ -41,7 +53,7 @@
         </div>
       </div>
       <div class="tian">
-        <label>请假时长</label>
+        <label>出差时长</label>
         <input type="text" placeholder="天" />
       </div>
     </div>
@@ -49,13 +61,26 @@
       自动校准打卡记录
       <a>了解详情</a>
     </div>
-    <div class="you">请假事由</div>
-    <textarea placeholder="请输入请假事由"></textarea>
-    <div class="block">
-      <el-date-picker v-model="value3" type="date" placeholder="加班日期"></el-date-picker>
+
+    <!-- 附件 -->
+    <div class="jian">
+      <div class="title">附件</div>
+      <el-upload
+        class="upload-demo"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :before-remove="beforeRemove"
+        multiple
+        :limit="3"
+        :on-exceed="handleExceed"
+        :file-list="fileList"
+      >
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+      </el-upload>
     </div>
-    <div class="you">备注</div>
-    <textarea placeholder="请输入"></textarea>
+
     <div class="ren">
       <div>审批人</div>
       <div class="dian"></div>
@@ -80,8 +105,8 @@
           class="avatar-uploader"
           action="https://jsonplaceholder.typicode.com/posts/"
           :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
+          :on-success="handleAvatarSuccess1"
+          :before-upload="beforeAvatarUpload2"
         >
           <img v-if="imageUrl" :src="imageUrl" class="avatar" />
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -100,6 +125,7 @@ export default {
   },
   data() {
     return {
+      fileList: [],
       imageUrl: "",
       options: [
         {
@@ -123,32 +149,12 @@ export default {
           label: "产品部"
         }
       ],
-      data: [
-        {
-          value: "选项1",
-          label: "生病"
-        },
-        {
-          value: "选项2",
-          label: "有事"
-        },
-        {
-          value: "选项3",
-          label: "出差"
-        },
-        {
-          value: "选项4",
-          label: "住院"
-        },
-        {
-          value: "选项5",
-          label: "其他"
-        }
-      ],
       value: "",
       value1: "",
       value2: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
-      value3: ""
+      value3: "",
+      input3: "",
+      input4: ""
     };
   },
   methods: {
@@ -166,6 +172,38 @@ export default {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
       return isJPG && isLt2M;
+    },
+    handleAvatarSuccess1(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    beforeAvatarUpload2(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
+
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(
+        `当前限制选择 3 个文件，本次选择了 ${
+          files.length
+        } 个文件，共选择了 ${files.length + fileList.length} 个文件`
+      );
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
     }
   }
 };
@@ -219,6 +257,17 @@ export default {
   }
 }
 
+.shi {
+  width: 100%;
+  height: 3.5rem;
+  margin-top: 0.2rem;
+  padding-left: 0.3rem;
+
+  .title {
+    font-size: 30px;
+  }
+}
+
 .start {
   width: 100%;
   height: 2rem;
@@ -244,9 +293,9 @@ export default {
   label {
     width: 3rem;
     height: 1rem;
-    text-align: center;
     line-height: 1rem;
     font-size: 30px;
+    margin-left: 0.2rem;
   }
 
   input {
@@ -281,10 +330,20 @@ textarea {
   font-size: 24px;
 }
 
+.jian {
+  width: 100%;
+  height: 2.5rem;
+
+  .title {
+    font-size: 30px;
+  }
+}
+
 .ren {
-  margin-top:0.2rem;
+  margin-top: 0.2rem;
   font-size: 30px;
   position: relative;
+
   .dian {
     position: absolute;
     left: 1rem;
@@ -295,14 +354,15 @@ textarea {
     background: red;
   }
 }
+
 .btn {
   width: 6rem;
   height: 1rem;
-  border-radius:10%;
-  line-height:1rem;
-  text-align:center;
+  border-radius: 10%;
+  line-height: 1rem;
+  text-align: center;
   background: skyblue;
-  color:#fff;
+  color: #fff;
   margin: 0.1rem auto;
 }
 </style>
@@ -399,4 +459,19 @@ textarea {
   height: 178px;
   display: block;
 }
+.el-input--suffix .el-input__inner {
+  width: 6rem;
+  height: 1rem;
+  font-size: 28px;
+}
+.el-button--small {
+  width: 200px;
+  height: 50px;
+}
+.el-upload__tip {
+  font-size: 24px;
+}
+.upload-demo {
+  margin-top: 20px;
+}    
 </style>
