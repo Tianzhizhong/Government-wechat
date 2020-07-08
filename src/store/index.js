@@ -1,15 +1,20 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
 
-Vue.use(Vuex)
+export default {
 
-export default new Vuex.Store({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
-})
+    state: {
+        userToken: localStorage.getItem('userToken') ? localStorage.getItem('userToken') : ''
+    },
+
+    mutations: {
+        changeLogin(state, user) {
+
+            state.userToken = user.userToken;
+
+            localStorage.setItem('userToken', user.userToken);
+
+        }
+    },
+    actions: {
+    }
+
+}
